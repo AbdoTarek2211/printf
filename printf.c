@@ -1,46 +1,47 @@
 #include "main.h"
-#include <stdio.h>
 #include <unistd.h>
 /**
- * _printf - prints all strings
- * @format: the kind of format c for char s for string i for int f for
- * float.
- * Return: a string with tha arguments.
+ * _printf - Emulate the original.
+ *
+ * @format: Format by specifier.
+ *
+ * Return: count of chars.
  */
 int _printf(const char *format, ...)
 {
-va_list list;
-int i = 0, count = 0, char_count;
-va_start(list, format);
+	int i = 0, count = 0, count_fun;
+	va_list args;
 
-while (format[i])
-{
-char_count = 0;
-if (format[i] == '%')
-{
-if (!format[i + 1] || (format[i + 1] == ' ' && !format[i + 2]))
-{
-count = -1;
-break;
-}
-char_count += get_function(format[i + 1], list);
-if (count_fun == 0)
-count += _putchar(format[i + 1]);
-if (char_count == -1)
-count = -1;
-i++;
-}
-else
-{
-if (count == -1)
-_putchar(format[i]);
-else
-count += _putchar(format[i]);
-}
-i++;
-if (count != -1)
-count += char_count;
-}
-va_end(list);
-return (count);
+	va_start(args, format);
+	if (!format || (format[0] == '%' && !format[1]))
+		return (-1);
+	if (format[0] == '%' && format[1] == ' ' && !format[2])
+		return (-1);
+	while (format[i])
+	{
+		count_fun = 0;
+		if (format[i] == '%')
+		{
+			if (!format[i + 1] || (format[i + 1] == ' ' && !format[i + 2]))
+			{
+				count = -1;
+				break;
+			}
+			count_fun += get_function(format[i + 1], args);
+			if (count_fun == 0)
+				count += _putchar(format[i + 1]);
+			if (count_fun == -1)
+				count = -1;
+			i++;
+		}
+		else
+		{
+			(count == -1) ? (_putchar(format[i])) : (count += _putchar(format[i]));
+		}
+		i++;
+		if (count != -1)
+			count += count_fun;
+	}
+	va_end(args);
+	return (count);
 }
