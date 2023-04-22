@@ -1,6 +1,6 @@
 #include "main.h"
 #include <stdio.h>
-#include <stdlib.h>
+#include <unistd.h>
 /**
  * _printf - prints all strings
  * @format: the kind of format c for char s for string i for int f for
@@ -10,20 +10,37 @@
 int _printf(const char *format, ...)
 {
 va_list list;
-char *str;
-unsigned int i = 0;
-unsigned int x = 0;
+int i = 0, count = 0, char_count;
 va_start(list, format);
-for (i = 0; format && format[i] != '\0'; i++)
+
+while (format[i])
 {
-if (format[i] != '%')
+char_count = 0;
+if (format[i] == '%')
 {
-x++;
+if (!format[i + 1] || (format[i + 1] == ' ' && !format[i + 2]))
+{
+count = -1;
+break;
+}
+char_count += get_function(format[i + 1], list);
+if (count_fun == 0)
+count += _putchar(format[i + 1]);
+if (char_count == -1)
+count = -1;
+i++;
 }
 else
-++i;
-x++;
+{
+if (count == -1)
+_putchar(format[i]);
+else
+count += _putchar(format[i]);
+}
+i++;
+if (count != -1)
+count += char_count;
 }
 va_end(list);
-return (x);
+return (count);
 }
