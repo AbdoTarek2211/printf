@@ -14,27 +14,16 @@ char *str;
 unsigned int i = 0;
 unsigned int x = 0;
 va_start(list, format);
-while (format && format[i] != '\0')
+for (i = 0; format && format[i] != '\0'; i++)
 {
-switch (format[i])
-{
-case 'c':
-while (format[i] != '\0')
+if (format[i] != '%')
 {
 x++;
 }
-break;
-case 's':
-str = va_arg(list, char *);
-while (*str)
-{
+else
+++i;
 x++;
-str++;
 }
-case '%':
-reutrn (x++);
-}
-i++;
 va_end(list);
 return (x);
 }
